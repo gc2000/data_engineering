@@ -1,7 +1,12 @@
+.gitignore
+ghalib/
+*.zip
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so
@@ -25,6 +30,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+ghalib/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
