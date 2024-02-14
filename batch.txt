@@ -1,0 +1,44 @@
+# Update the credentials
+
+export AWS_ACCESS_KEY_ID=ASIAZ6WMQF66H5WVMYHT
+export AWS_SECRET_ACCESS_KEY=GAbeyug+uVA0Og1qSu+NrlSJle5ymr6IlSYnp/hZ
+export AWS_SESSION_TOKEN=FwoGZXIvYXdzELz//////////wEaDNiTEIeaW/U/sNIrEiLVAWUg4wMMYDzVYv23onG/fMd0k9n1DQQFRaJ5R/wQVpmw5QSBSLN76ksZuqQlRyATBBvaeT7gmZyVNZD5vNDFk4re4/VEgOLwAN1vdz3bk1xeRP76er91v8hGGZZ8UaHmcUgWcpO6pE6sNUazjhLVEFNlXLAQCZKPxOokM3LcgM5QoCWV9yuEZpHP8dIF+ILXxg0meUz2KPcy1uSA/GRF2BUMwnWToMmldVoXXgoPIAwXPmdAePAx3e75v8kkg4QJ7ZCjp8KF4WXrVuAcSxJoFwqB3pJahSjlzLCuBjItPFh8BGIq6eNtb/5WFlBretu7I5KEZcqsRXRvA8Shvby7Slxi6zq1ESO0/ICG
+
+# update 
+aws lambda update-function-configuration \
+--function-name lambda1 \
+--environment Variables="{  \
+BUCKET_NAME = test-sg-0213-1, \
+ACCESS_KEY_ID=ASIAZ6WMQF66H5WVMYHT, \
+SECRET_ACCESS_KEY=GAbeyug+uVA0Og1qSu+NrlSJle5ymr6IlSYnp/hZ, \
+SESSION_TOKEN=FwoGZXIvYXdzELz//////////wEaDNiTEIeaW/U/sNIrEiLVAWUg4wMMYDzVYv23onG/fMd0k9n1DQQFRaJ5R/wQVpmw5QSBSLN76ksZuqQlRyATBBvaeT7gmZyVNZD5vNDFk4re4/VEgOLwAN1vdz3bk1xeRP76er91v8hGGZZ8UaHmcUgWcpO6pE6sNUazjhLVEFNlXLAQCZKPxOokM3LcgM5QoCWV9yuEZpHP8dIF+ILXxg0meUz2KPcy1uSA/GRF2BUMwnWToMmldVoXXgoPIAwXPmdAePAx3e75v8kkg4QJ7ZCjp8KF4WXrVuAcSxJoFwqB3pJahSjlzLCuBjItPFh8BGIq6eNtb/5WFlBretu7I5KEZcqsRXRvA8Shvby7Slxi6zq1ESO0/ICG}"
+
+
+# 1. Install Python Extension if not 
+
+# 2. Enter Venv
+source ./venv-DE/bin/activate
+
+# 3. Create S3 bucket
+aws s3api create-bucket --bucket test-sg-0213-1 --region us-east-1 
+aws s3 ls
+
+# 4. zip
+cd /code/data_engineering/ghalib
+zip -r ../lambda3.zip .
+cd ..
+zip -g lambda2.zip *.py (# specify the python name need to upload )
+zip -r lambda2.zip ../venv-DE/lib/python3.12/site-packages/python_dotenv-1.0.1.dist-info
+zip -r lambda2.zip .env
+#5. Create Lambda (not working. need create lambda manually)
+
+aws lambda create-function --function-name myFunction \
+--runtime python3.12 --handler lambda_function.lambda_handler \
+--role arn:aws:iam::684402421692:role/service-role/my-lambda-role \
+--zip-file fileb://lambda2.zip
+
+#6. Upload zip file to lambda
+aws lambda update-function-code --function-name lambda1 --zip-file fileb://lambda2.zip
+
+
+                    
